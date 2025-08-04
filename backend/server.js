@@ -24,6 +24,10 @@ app.use('/api/notes', notesRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
+  res.send(" Hello");
+});
+
+app.get('/api/health', (req, res) => {
   res.json({ message: 'Server is running!' });
 });
 
