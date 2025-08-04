@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: "https://notospacebackend.vercel.app",
+  origin: "https://notospace.vercel.app",
   credentials: true
 }));
 app.use(express.json());
