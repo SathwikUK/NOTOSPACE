@@ -8,7 +8,7 @@ const LoginPage = ({ setUser }) => {
   const handleGoogleLogin = async (credential) => {
     setLoading(true);
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      
 const response = await fetch(`https://notospacebackend.vercel.app/api/auth/google`, {
         method: 'POST',
         headers: {
