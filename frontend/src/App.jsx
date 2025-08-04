@@ -3,13 +3,12 @@ import { AuthProvider } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 import LoadingSpinner from './components/LoadingSpinner';
- import axios from "./api/axios";
+import axios from './api/axios'; // <-- Adjust this path if necessary
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate initial app loading
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -33,16 +32,15 @@ function App() {
 function AppContent() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  
 
   useEffect(() => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    axios.get('/api/auth/me', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.get('/api/auth/me', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(res => {
         if (res.data.success) {
           setUser(res.data.user);
@@ -55,11 +53,10 @@ function AppContent() {
         localStorage.removeItem('token');
       })
       .finally(() => setLoading(false));
-  } else {
-    setLoading(false);
-  }
-}, []);
-
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
   if (loading) {
     return <LoadingSpinner />;
