@@ -3,6 +3,7 @@ import { PlusIcon, MagnifyingGlassIcon, UserCircleIcon, ArrowRightOnRectangleIco
 import NoteCard from '../components/NoteCard';
 import NoteModal from '../components/NoteModal';
 import toast from 'react-hot-toast';
+import axios from '../api/axios';
 
 const Dashboard = ({ user, setUser }) => {
   const [notes, setNotes] = useState([]);
@@ -27,18 +28,14 @@ const Dashboard = ({ user, setUser }) => {
 
   const fetchNotes = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/notes`, {
-        headers: getAuthHeaders()
-      });
-      const data = await response.json();
-      
+      const { data } = await axios.get('/api/notes');
       if (data.success) {
         setNotes(data.notes);
       } else {
         toast.error('Failed to fetch notes');
       }
-    } catch (error) {
-      console.error('Fetch notes error:', error);
+    } catch (err) {
+      console.error('Fetch notes error:', err);
       toast.error('Failed to load notes');
     } finally {
       setLoading(false);
@@ -47,67 +44,45 @@ const Dashboard = ({ user, setUser }) => {
 
   const handleCreateNote = async (noteData) => {
     try {
-      const response = await fetch(`${API_URL}/api/notes`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(noteData)
-      });
-      
-      const data = await response.json();
-      
+      const { data } = await axios.post('/api/notes', noteData);
       if (data.success) {
         setNotes([data.note, ...notes]);
         toast.success('Note created successfully!');
       } else {
         toast.error(data.message || 'Failed to create note');
       }
-    } catch (error) {
-      console.error('Create note error:', error);
+    } catch (err) {
+      console.error('Create note error:', err);
       toast.error('Failed to create note');
     }
   };
 
   const handleUpdateNote = async (noteData) => {
     try {
-      const response = await fetch(`${API_URL}/api/notes/${editingNote._id}`, {
-        method: 'PUT',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(noteData)
-      });
-      
-      const data = await response.json();
-      
+      const { data } = await axios.put(`/api/notes/${editingNote._id}`, noteData);
       if (data.success) {
-        setNotes(notes.map(note => 
-          note._id === editingNote._id ? data.note : note
-        ));
+        setNotes(notes.map(note => note._id === editingNote._id ? data.note : note));
         toast.success('Note updated successfully!');
       } else {
         toast.error(data.message || 'Failed to update note');
       }
-    } catch (error) {
-      console.error('Update note error:', error);
+    } catch (err) {
+      console.error('Update note error:', err);
       toast.error('Failed to update note');
     }
   };
 
   const handleDeleteNote = async (noteId) => {
     try {
-      const response = await fetch(`${API_URL}/api/notes/${noteId}`, {
-        method: 'DELETE',
-        headers: getAuthHeaders()
-      });
-      
-      const data = await response.json();
-      
+      const { data } = await axios.delete(`/api/notes/${noteId}`);
       if (data.success) {
         setNotes(notes.filter(note => note._id !== noteId));
         toast.success('Note deleted successfully!');
       } else {
         toast.error(data.message || 'Failed to delete note');
       }
-    } catch (error) {
-      console.error('Delete note error:', error);
+    } catch (err) {
+      console.error('Delete note error:', err);
       toast.error('Failed to delete note');
     }
   };

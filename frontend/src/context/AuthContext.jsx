@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-
+ import axios from "../api/axios";
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -16,33 +16,33 @@ export const AuthProvider = ({ children }) => {
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'; // fallback if env missing
 
-  const login = async (credential) => {
-    setLoading(true);
-    try {
-      const response = await fetch(`${API_URL}/api/auth/google`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ credential }),
-      });
+  // adjust path based on your file structure
 
-      const data = await response.json();
+const login = async (credential) => {
+  setLoading(true);
+  try {
+    const response = await axios.post("/api/auth/google", { credential });
 
-      if (data.success) {
-        localStorage.setItem('token', data.token);
-        setUser(data.user);
-        return { success: true };
-      } else {
-        return { success: false, message: data.message };
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      return { success: false, message: 'Login failed' };
-    } finally {
-      setLoading(false);
+    const data = response.data;
+
+    if (data.success) {
+      localStorage.setItem("token", data.token);
+      setUser(data.user);
+      return { success: true };
+    } else {
+      return { success: false, message: data.message };
     }
-  };
+  } catch (error) {
+    console.error("Login error:", error.response?.data || error.message);
+    return {
+      success: false,
+      message:
+        error.response?.data?.message || "Login failed. Please try again.",
+    };
+  } finally {
+    setLoading(false);
+  }
+};
 
   const logout = () => {
     localStorage.removeItem('token');

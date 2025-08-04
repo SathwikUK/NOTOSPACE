@@ -1,38 +1,31 @@
 import { useState } from 'react';
 import GoogleLoginButton from '../components/GoogleLoginButton';
 import toast from 'react-hot-toast';
+import axios from '../api/axios';
 
 const LoginPage = ({ setUser }) => {
   const [loading, setLoading] = useState(false);
 
   const handleGoogleLogin = async (credential) => {
-    setLoading(true);
-    try {
-      
-const response = await fetch(`https://notospacebackend.vercel.app/api/auth/google`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ credential }),
-      });
+  setLoading(true);
+  try {
+    const { data } = await axios.post('/api/auth/google', { credential });
 
-      const data = await response.json();
-      
-      if (data.success) {
-        localStorage.setItem('token', data.token);
-        setUser(data.user);
-        toast.success(`Welcome back, ${data.user.name}!`);
-      } else {
-        toast.error(data.message || 'Login failed');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      toast.error('Login failed. Please try again.');
-    } finally {
-      setLoading(false);
+    if (data.success) {
+      localStorage.setItem('token', data.token);
+      setUser(data.user);
+      toast.success(`Welcome back, ${data.user.name}!`);
+    } else {
+      toast.error(data.message || 'Login failed');
     }
-  };
+  } catch (error) {
+    console.error('Login error:', error);
+    toast.error('Login failed. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleGoogleError = (error) => {
     console.error('Google login error:', error);

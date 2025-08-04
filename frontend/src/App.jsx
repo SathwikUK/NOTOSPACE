@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 import LoadingSpinner from './components/LoadingSpinner';
+ import axios from "./api/axios";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,22 +33,19 @@ function App() {
 function AppContent() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      // Verify token and get user data
-      fetch(`${API_URL}/api/auth/me`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          setUser(data.user);
+  const token = localStorage.getItem('token');
+  if (token) {
+    axios.get('/api/auth/me', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(res => {
+        if (res.data.success) {
+          setUser(res.data.user);
         } else {
           localStorage.removeItem('token');
         }
@@ -57,10 +55,11 @@ function AppContent() {
         localStorage.removeItem('token');
       })
       .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
-  }, []);
+  } else {
+    setLoading(false);
+  }
+}, []);
+
 
   if (loading) {
     return <LoadingSpinner />;
