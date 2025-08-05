@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { TrashIcon, PencilIcon, EyeIcon } from '@heroicons/react/24/outline';
+
+// Utility function to remove HTML tags
 const stripHtmlTags = (html) => {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = html;
   return tempDiv.textContent || tempDiv.innerText || '';
 };
+
 const NoteCard = ({ note, onDelete, onEdit, onView }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -28,6 +31,15 @@ const NoteCard = ({ note, onDelete, onEdit, onView }) => {
     return text.length <= maxLength ? text : text.substring(0, maxLength) + '...';
   };
 
+  // Strip tags before passing to View
+  const handleView = () => {
+    const cleanedNote = {
+      ...note,
+      content: stripHtmlTags(note.content),
+    };
+    onView(cleanedNote);
+  };
+
   return (
     <>
       <div className="bg-gradient-to-br from-zinc-900/60 to-zinc-800/60 border border-zinc-700 rounded-xl shadow-xl p-5 group transition duration-300 transform hover:scale-105 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)]">
@@ -38,7 +50,7 @@ const NoteCard = ({ note, onDelete, onEdit, onView }) => {
           </h2>
           <div className="flex space-x-2">
             <button
-              onClick={() => onView(note)}
+              onClick={handleView}
               className="text-blue-400 hover:text-blue-300 p-1 transition"
               title="View"
             >
