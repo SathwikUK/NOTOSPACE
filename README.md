@@ -1,8 +1,17 @@
 ![Personal Notes Manager](./Screenshots/login.png)
 
-# Personal Notes Manager
+<div align="center">
 
-A full-stack MERN application with OAuth authentication and a modern, responsive UI for managing personal notes. Built with React, Node.js, Express, and MongoDB.
+  <h1>📒 NotoSpace</h1>
+
+  <p>
+    A full-stack MERN application with OAuth authentication and a modern, responsive UI  
+    for managing personal notes. <br />
+    Built with Uniqueness and Hardwork.
+  </p>
+
+</div>
+
 
 ## 🌟 Features
 
@@ -431,4 +440,5 @@ We welcome contributions! Please follow these steps:
 **Made with uniqueness and hardwork**
 
 *Ready to organize your thoughts? Clone this repo and start your note-taking journey!*
+
 
