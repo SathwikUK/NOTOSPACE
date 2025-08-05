@@ -1,4 +1,4 @@
-![Personal Notes Manager](./screenshots/login.png)
+![Personal Notes Manager](./Screenshots/login.png)
 
 # Personal Notes Manager
 
@@ -431,3 +431,4 @@ We welcome contributions! Please follow these steps:
 **Made with uniqueness and hardwork**
 
 *Ready to organize your thoughts? Clone this repo and start your note-taking journey!*
+
